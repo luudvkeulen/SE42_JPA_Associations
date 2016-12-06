@@ -2,9 +2,21 @@ package auction.domain;
 
 import nl.fontys.util.Money;
 
-public class Item implements Comparable {
+import javax.persistence.*;
+import java.io.Serializable;
 
+
+@Entity
+@NamedQueries({
+        @NamedQuery(name = "Item.count", query = "select count(i) from Item i"),
+        @NamedQuery(name = "Item.findById", query = "select i from Item i where i.id = :id"),
+        @NamedQuery(name = "Item.findByDesc", query = "select i from Item i where i.description = :desc")
+})
+public class Item implements Comparable, Serializable {
+
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+    @ManyToOne
     private User seller;
     private Category category;
     private String description;
@@ -15,6 +27,8 @@ public class Item implements Comparable {
         this.category = category;
         this.description = description;
     }
+
+    public Item() {}
 
     public Long getId() {
         return id;
@@ -45,17 +59,13 @@ public class Item implements Comparable {
     }
 
     public int compareTo(Object arg0) {
-        //TODO
-        return -1;
+        return 0;
     }
 
     public boolean equals(Object o) {
-        //TODO
+        if (!(o instanceof Item)) return false;
+        Item other = (Item)o;
+        if(other.getId() == this.id) return true;
         return false;
-    }
-
-    public int hashCode() {
-        //TODO
-        return 0;
     }
 }

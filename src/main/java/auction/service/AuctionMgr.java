@@ -1,13 +1,25 @@
 package auction.service;
 
+import auction.dao.ItemDAOJPAImpl;
+import auction.dao.UserDAOJPAImpl;
 import nl.fontys.util.Money;
 import auction.domain.Bid;
 import auction.domain.Item;
 import auction.domain.User;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AuctionMgr  {
+
+    private final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("auctionUnit");
+
+    private ItemDAOJPAImpl itemDAOJPA;
+
+    public AuctionMgr() {}
 
    /**
      * @param id
@@ -15,7 +27,10 @@ public class AuctionMgr  {
      *         geretourneerd
      */
     public Item getItem(Long id) {
-        // TODO
+        EntityManager em = entityManagerFactory.createEntityManager();
+        itemDAOJPA = new ItemDAOJPAImpl(em);
+        Item result = itemDAOJPA.find(id);
+        if(result != null) return result;
         return null;
     }
 
@@ -25,8 +40,9 @@ public class AuctionMgr  {
      * @return een lijst met items met @desciption. Eventueel lege lijst.
      */
     public List<Item> findItemByDescription(String description) {
-        // TODO
-        return new ArrayList<Item>();
+        EntityManager em = entityManagerFactory.createEntityManager();
+        itemDAOJPA = new ItemDAOJPAImpl(em);
+        return itemDAOJPA.findByDescription(description);
     }
 
     /**
@@ -37,7 +53,11 @@ public class AuctionMgr  {
      *         amount niet hoger was dan het laatste bod, dan null
      */
     public Bid newBid(Item item, User buyer, Money amount) {
-        // TODO 
-        return null;
+        EntityManager em = entityManagerFactory.createEntityManager();
+        itemDAOJPA = new ItemDAOJPAImpl(em);
+        em.getTransaction().begin();
+        Bid bid = item.newBid(buyer, amount);
+        em.getTransaction().commit();
+        return bid;
     }
 }

@@ -26,7 +26,7 @@ public class UserDAOJPAImpl implements UserDAO {
 
     @Override
     public void create(User user) {
-         if (findByEmail(user.getEmail()) != null) {
+        if (findByEmail(user.getEmail()) != null) {
             throw new EntityExistsException();
         }
         entityManager.persist(user);
