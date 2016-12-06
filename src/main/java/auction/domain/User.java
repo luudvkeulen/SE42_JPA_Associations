@@ -2,6 +2,9 @@ package auction.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @NamedQueries({
@@ -14,9 +17,12 @@ public class User implements Serializable {
     //private Integer id;
     @Id
     private String email;
+    @OneToMany (mappedBy = "seller")
+    private Set<Item> offeredItems;
 
     public User(String email) {
         this.email = email;
+        this.offeredItems = new LinkedHashSet<>();
     }
 
     public User() {
@@ -30,5 +36,17 @@ public class User implements Serializable {
     @Override
     public boolean equals(Object o) {
         return (this.email.equals(((User)o).getEmail()));
+    }
+
+    public Iterator<Item> getOfferedItems() {
+        return this.offeredItems.iterator();
+    }
+
+    public void addOfferedItem(Item i) {
+        this.offeredItems.add(i);
+    }
+
+    public int numberOfOfferedItems() {
+        return offeredItems.size();
     }
 }
