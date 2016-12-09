@@ -20,6 +20,7 @@ public class Item implements Comparable, Serializable {
     private User seller;
     private Category category;
     private String description;
+    @OneToOne
     private Bid highest;
 
     public Item(User seller, Category category, String description) {
@@ -55,7 +56,7 @@ public class Item implements Comparable, Serializable {
         if (highest != null && highest.getAmount().compareTo(amount) >= 0) {
             return null;
         }
-        highest = new Bid(buyer, amount);
+        highest = new Bid(buyer, amount, this);
         return highest;
     }
 

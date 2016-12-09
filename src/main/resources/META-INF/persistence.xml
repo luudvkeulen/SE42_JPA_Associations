@@ -5,6 +5,7 @@
         <shared-cache-mode>NONE</shared-cache-mode>
         <class>auction.domain.User</class>
         <class>auction.domain.Item</class>
+        <class>auction.domain.Bid</class>
         <properties>
             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://51.255.165.47:3306/auction"/>
             <property name="javax.persistence.jdbc.password" value="Fontys2016"/>
